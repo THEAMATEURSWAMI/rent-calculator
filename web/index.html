@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Rent Calculator - Track rent dues, calculate splits, and manage your budget.">
+
+  <!-- Allow browser password managers & autofill to work -->
+  <meta name="format-detection" content="telephone=no">
+
+  <!-- PWA / iOS -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Rent Calculator">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>Rent Calculator</title>
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Plaid Link SDK -->
+  <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
+
+  <style>
+    /* Prevent flash of unstyled content */
+    body {
+      margin: 0;
+      background-color: #ffffff;
+    }
+    /* Allow browser autofill/copy-paste overlays to render above Flutter canvas */
+    flt-glass-pane {
+      z-index: 0 !important;
+    }
+    /* Plaid iframe sits above Flutter canvas */
+    #plaid-link-iframe-1 {
+      z-index: 9999 !important;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    /**
+     * Opens Plaid Link modal on the web.
+     * Called from Flutter via dart:js interop.
+     *
+     * @param {string}   linkToken  - link_token from your backend
+     * @param {Function} onSuccess  - called with (publicToken, metadataJson)
+     * @param {Function} onExit     - called with (errJson, metadataJson)
+     */
+    function openPlaidLink(linkToken, onSuccess, onExit) {
+      if (typeof Plaid === 'undefined') {
+        console.error('Plaid Link SDK not loaded');
+        if (onExit) onExit('Plaid SDK not loaded', '{}');
+        return;
+      }
+      var handler = Plaid.create({
+        token: linkToken,
+        onSuccess: function(public_token, metadata) {
+          onSuccess(public_token, JSON.stringify(metadata));
+        },
+        onExit: function(err, metadata) {
+          onExit(
+            err ? JSON.stringify(err) : null,
+            JSON.stringify(metadata)
+          );
+        },
+        onLoad: function() {},
+        onEvent: function(eventName, metadata) {}
+      });
+      handler.open();
+    }
+
+    /** Returns true if Plaid SDK is loaded and ready. */
+    function isPlaidReady() {
+      return typeof Plaid !== 'undefined';
+    }
+  </script>
+
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
