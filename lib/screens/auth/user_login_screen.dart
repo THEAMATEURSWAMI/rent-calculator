@@ -34,14 +34,15 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
   @override
   void initState() {
     super.initState();
-    _user = DefaultUsers.users.cast<DefaultUser?>().firstWhere(
-          (u) => u!.name.toLowerCase() == widget.userName.toLowerCase(),
-          orElse: () => null,
-        );
-    // Pre-fill email so browser password managers can read it
-    final user = _user;
-    if (user != null) {
-      _emailController.text = user.email;
+    // Find user safely
+    final foundUser = DefaultUsers.users.cast<DefaultUser?>().firstWhere(
+      (u) => u?.name.toLowerCase() == widget.userName.toLowerCase(),
+      orElse: () => null,
+    );
+    _user = foundUser;
+
+    if (foundUser != null) {
+      _emailController.text = foundUser.email;
     }
     _loadRememberMeState();
   }
@@ -87,6 +88,7 @@ class _UserLoginScreenState extends State<UserLoginScreen> {
       // LOCAL  → session survives browser close (Remember Me ON)
       // SESSION → session ends when tab is closed (Remember Me OFF)
       if (kIsWeb) {
+        // This is a future, we must check mounted after
         await FirebaseAuth.instance.setPersistence(
           _rememberMe ? Persistence.LOCAL : Persistence.SESSION,
         );
