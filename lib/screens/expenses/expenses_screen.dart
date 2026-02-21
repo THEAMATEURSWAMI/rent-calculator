@@ -5,6 +5,9 @@ import 'package:intl/intl.dart';
 import '../../services/firebase_service.dart';
 import '../../models/expense.dart';
 
+import '../../widgets/app_drawer.dart';
+import '../../widgets/avatar_selector_widget.dart';
+
 class ExpensesScreen extends StatelessWidget {
   const ExpensesScreen({super.key});
 
@@ -17,6 +20,11 @@ class ExpensesScreen extends StatelessWidget {
       return const Scaffold(body: Center(child: Text('Not authenticated')));
     }
 
+    final displayName = firebaseService.currentUser?.email?.split('@').first ?? '';
+    final formattedName = displayName.isEmpty 
+        ? '' 
+        : displayName[0].toUpperCase() + displayName.substring(1);
+
     final now = DateTime.now();
     final startOfMonth = DateTime(now.year, now.month, 1);
 
@@ -28,8 +36,13 @@ class ExpensesScreen extends StatelessWidget {
             icon: const Icon(Icons.add),
             onPressed: () => context.go('/expenses/add'),
           ),
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: AvatarBadge(userName: formattedName, size: 36),
+          ),
         ],
       ),
+      drawer: const AppDrawer(),
       body: StreamBuilder<List<Expense>>(
         stream: firebaseService.getExpenses(userId, startDate: startOfMonth),
         builder: (context, snapshot) {

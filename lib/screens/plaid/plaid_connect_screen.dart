@@ -8,6 +8,9 @@ import '../../services/firebase_service.dart';
 import '../../models/plaid_account.dart';
 import '../../utils/plaid_js_integration.dart' as plaid_js;
 
+import '../../widgets/app_drawer.dart';
+import '../../widgets/avatar_selector_widget.dart';
+
 // ─── colours ─────────────────────────────────────────────────────────────────
 const _plaidGreen = Color(0xFF00B050);
 const _plaidBlack = Color(0xFF111111);
@@ -286,6 +289,12 @@ class _PlaidConnectScreenState extends State<PlaidConnectScreen>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final firebaseService = context.watch<FirebaseService>();
+    final displayName = firebaseService.currentUser?.email?.split('@').first ?? '';
+    final formattedName = displayName.isEmpty 
+        ? '' 
+        : displayName[0].toUpperCase() + displayName.substring(1);
+
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       appBar: AppBar(
@@ -297,8 +306,13 @@ class _PlaidConnectScreenState extends State<PlaidConnectScreen>
               tooltip: 'Sync transactions',
               onPressed: _syncTransactions,
             ),
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: AvatarBadge(userName: formattedName, size: 36),
+          ),
         ],
       ),
+      drawer: const AppDrawer(),
       body: AnimatedSwitcher(
         duration: const Duration(milliseconds: 320),
         child: _buildBody(theme),

@@ -7,6 +7,9 @@ import '../../services/firebase_service.dart';
 import '../../utils/default_users.dart';
 import 'add_utility_bill_screen.dart';
 
+import '../../widgets/app_drawer.dart';
+import '../../widgets/avatar_selector_widget.dart';
+
 // Per-user accent colours (match DefaultUsers)
 const _userColors = {
   'Jacob': Color(0xFF4A90D9),
@@ -58,6 +61,11 @@ class _UtilitySplitScreenState extends State<UtilitySplitScreen> {
   Widget build(BuildContext context) {
     final fb     = context.read<FirebaseService>();
     final fmtMon = NumberFormat.currency(symbol: r'$');
+    
+    final displayName = fb.currentUser?.email?.split('@').first ?? '';
+    final formattedName = displayName.isEmpty 
+        ? '' 
+        : displayName[0].toUpperCase() + displayName.substring(1);
 
     return Scaffold(
       appBar: AppBar(
@@ -68,8 +76,13 @@ class _UtilitySplitScreenState extends State<UtilitySplitScreen> {
             tooltip: 'Add bill',
             onPressed: () => _openAddBill(context, fb),
           ),
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: AvatarBadge(userName: formattedName, size: 36),
+          ),
         ],
       ),
+      drawer: const AppDrawer(),
       body: Column(
         children: [
           // ── Month navigator ────────────────────────────────────────────

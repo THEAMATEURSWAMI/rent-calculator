@@ -8,6 +8,7 @@ import '../../models/rent_payment.dart';
 import '../../services/rent_calculator_service.dart';
 import '../../widgets/month_calendar_widget.dart';
 import '../../widgets/avatar_selector_widget.dart';
+import '../../widgets/app_drawer.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -48,25 +49,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            AvatarBadge(userName: displayName, size: 32),
-            const SizedBox(width: 10),
-            const Text('Rent Calculator'),
-          ],
-        ),
+        title: const Text('Rent Calculator'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            tooltip: 'Sign out',
-            onPressed: () async {
-              await RememberMeService.clearRemembered();
-              await firebaseService.signOut();
-              if (context.mounted) context.go('/login');
-            },
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: AvatarBadge(userName: displayName, size: 36),
           ),
         ],
       ),
+      drawer: const AppDrawer(),
       body: StreamBuilder<List<RentPayment>>(
         stream: firebaseService.getRentPayments(userId),
         builder: (context, snapshot) {
@@ -113,198 +104,161 @@ class _DashboardScreenState extends State<DashboardScreen> {
           final totalDue = RentCalculatorService.calculateTotalRentDue(
               payments, now, now.add(const Duration(days: 30)));
 
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              final isMobile = constraints.maxWidth < 600;
 
-                // ── Avatar bridge: profile card → avatar → calendar card ──
-                _BridgeSection(
-                  avatarId: _avatarId,
-                  displayName: displayName,
-                  onAvatarSelected: (id) => setState(() => _avatarId = id),
-                  onDateTap: (date) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(DateFormat('EEEE, MMMM d, yyyy').format(date)),
-                      duration: const Duration(seconds: 2),
-                    ));
-                  },
-                ),
-                const SizedBox(height: 24),
-
-                // ── Summary Cards ────────────────────────────────────────
-                Row(children: [
-                  Expanded(child: _SummaryCard(
-                    title: 'Total Due (30 days)',
-                    value: '\$${totalDue.toStringAsFixed(2)}',
-                    icon: Icons.account_balance_wallet, color: Colors.blue)),
-                  const SizedBox(width: 16),
-                  Expanded(child: _SummaryCard(
-                    title: 'Upcoming Payments',
-                    value: upcoming.length.toString(),
-                    icon: Icons.calendar_today, color: Colors.orange)),
-                ]),
-                const SizedBox(height: 16),
-                Row(children: [
-                  Expanded(child: _SummaryCard(
-                    title: 'Paid This Month',
-                    value: '\$${payments.where((p) => p.isPaid && p.paidDate != null && p.paidDate!.month == now.month).fold<double>(0, (s, p) => s + p.amount).toStringAsFixed(2)}',
-                    icon: Icons.check_circle, color: Colors.green)),
-                  const SizedBox(width: 16),
-                  Expanded(child: _SummaryCard(
-                    title: 'Monthly Average',
-                    value: '\$${RentCalculatorService.calculateMonthlyAverage(payments).toStringAsFixed(2)}',
-                    icon: Icons.trending_up, color: Colors.purple)),
-                ]),
-                const SizedBox(height: 32),
-
-                // ── Quick Actions ────────────────────────────────────────
-                Text('Quick Actions',
-                    style: Theme.of(context).textTheme.titleLarge
-                        ?.copyWith(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 16),
-                Wrap(
-                  spacing: 12, runSpacing: 12,
+              return SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _ActionButton(icon: Icons.add,
-                        label: 'Add Rent Payment', onTap: () => context.go('/rent/add')),
-                    _ActionButton(icon: Icons.receipt,
-                        label: 'View Rent', onTap: () => context.go('/rent')),
-                    _ActionButton(icon: Icons.account_balance,
-                        label: 'Budget', onTap: () => context.go('/budget')),
-                    _ActionButton(icon: Icons.attach_money,
-                        label: 'Expenses', onTap: () => context.go('/expenses')),
-                    _ActionButton(icon: Icons.account_balance_wallet,
-                        label: 'Connect Bank', onTap: () => context.go('/plaid')),
-                    _ActionButton(icon: Icons.water_drop_outlined,
-                        label: 'Cost Split', onTap: () => context.go('/utilities')),
+                    // ── Quick Actions (NOW AT TOP) ──────────────────────────
+                    Text('Quick Actions',
+                        style: Theme.of(context).textTheme.titleLarge
+                            ?.copyWith(fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      child: Wrap(
+                        spacing: 12, 
+                        runSpacing: 12,
+                        alignment: isMobile ? WrapAlignment.center : WrapAlignment.start,
+                        children: [
+                          _ActionButton(icon: Icons.add,
+                              label: 'Add Rent', onTap: () => context.go('/rent/add')),
+                          _ActionButton(icon: Icons.receipt_long,
+                              label: 'View Rent', onTap: () => context.go('/rent')),
+                          _ActionButton(icon: Icons.account_balance,
+                              label: 'Budget', onTap: () => context.go('/budget')),
+                          _ActionButton(icon: Icons.attach_money,
+                              label: 'Expenses', onTap: () => context.go('/expenses')),
+                          _ActionButton(icon: Icons.account_balance_wallet,
+                              label: 'Connect Bank', onTap: () => context.go('/plaid')),
+                          _ActionButton(icon: Icons.water_drop_outlined,
+                              label: 'Cost Split', onTap: () => context.go('/utilities')),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+
+                    // ── Summary Section ─────────────────────────────────────
+                    Text('Overview',
+                        style: Theme.of(context).textTheme.titleLarge
+                            ?.copyWith(fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 16),
+                    if (isMobile) 
+                      Column(
+                        children: [
+                          _SummaryCard(
+                            title: 'Total Due (30 days)',
+                            value: '\$${totalDue.toStringAsFixed(2)}',
+                            icon: Icons.account_balance_wallet, color: Colors.blue),
+                          const SizedBox(height: 12),
+                          _SummaryCard(
+                            title: 'Upcoming Payments',
+                            value: upcoming.length.toString(),
+                            icon: Icons.calendar_today, color: Colors.orange),
+                          const SizedBox(height: 12),
+                          _SummaryCard(
+                            title: 'Paid This Month',
+                            value: '\$${payments.where((p) => p.isPaid && p.paidDate != null && p.paidDate!.month == now.month).fold<double>(0, (s, p) => s + p.amount).toStringAsFixed(2)}',
+                            icon: Icons.check_circle, color: Colors.green),
+                          const SizedBox(height: 12),
+                          _SummaryCard(
+                            title: 'Monthly Average',
+                            value: '\$${RentCalculatorService.calculateMonthlyAverage(payments).toStringAsFixed(2)}',
+                            icon: Icons.trending_up, color: Colors.purple),
+                        ],
+                      )
+                    else 
+                      Column(
+                        children: [
+                          Row(children: [
+                            Expanded(child: _SummaryCard(
+                              title: 'Total Due (30 days)',
+                              value: '\$${totalDue.toStringAsFixed(2)}',
+                              icon: Icons.account_balance_wallet, color: Colors.blue)),
+                            const SizedBox(width: 16),
+                            Expanded(child: _SummaryCard(
+                              title: 'Upcoming Payments',
+                              value: upcoming.length.toString(),
+                              icon: Icons.calendar_today, color: Colors.orange)),
+                          ]),
+                          const SizedBox(height: 16),
+                          Row(children: [
+                            Expanded(child: _SummaryCard(
+                              title: 'Paid This Month',
+                              value: '\$${payments.where((p) => p.isPaid && p.paidDate != null && p.paidDate!.month == now.month).fold<double>(0, (s, p) => s + p.amount).toStringAsFixed(2)}',
+                              icon: Icons.check_circle, color: Colors.green)),
+                            const SizedBox(width: 16),
+                            Expanded(child: _SummaryCard(
+                              title: 'Monthly Average',
+                              value: '\$${RentCalculatorService.calculateMonthlyAverage(payments).toStringAsFixed(2)}',
+                              icon: Icons.trending_up, color: Colors.purple)),
+                          ]),
+                        ],
+                      ),
+                    const SizedBox(height: 32),
+
+                    // ── Calendar Section ────────────────────────────────────
+                    Text('Payments Calendar',
+                        style: Theme.of(context).textTheme.titleLarge
+                            ?.copyWith(fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 16),
+                    Card(
+                      margin: EdgeInsets.zero,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: MonthCalendarWidget(
+                          onDateTap: (date) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(DateFormat('EEEE, MMMM d, yyyy').format(date)),
+                              duration: const Duration(seconds: 2),
+                            ));
+                          },
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+
+                    // ── Upcoming Payments ────────────────────────────────────
+                    Text('Upcoming Payments',
+                        style: Theme.of(context).textTheme.titleLarge
+                            ?.copyWith(fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 16),
+                    if (upcoming.isEmpty)
+                      Card(child: Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Center(child: Text('No upcoming payments',
+                            style: TextStyle(color: Colors.grey[600]))),
+                      ))
+                    else
+                      ...upcoming.take(5).map((p) => Card(
+                        margin: const EdgeInsets.only(bottom: 8),
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: p.isPaid ? Colors.green : Colors.orange,
+                            child: Icon(p.isPaid ? Icons.check : Icons.pending,
+                                color: Colors.white),
+                          ),
+                          title: Text('\$${p.amount.toStringAsFixed(2)}',
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18)),
+                          subtitle: Text(
+                              'Due: ${DateFormat('MMM dd, yyyy').format(p.dueDate)}'),
+                          trailing: p.isPaid
+                              ? const Icon(Icons.check_circle, color: Colors.green)
+                              : null,
+                        ),
+                      )),
                   ],
                 ),
-                const SizedBox(height: 32),
-
-                // ── Upcoming Payments ────────────────────────────────────
-                Text('Upcoming Payments',
-                    style: Theme.of(context).textTheme.titleLarge
-                        ?.copyWith(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 16),
-                if (upcoming.isEmpty)
-                  Card(child: Padding(
-                    padding: const EdgeInsets.all(24),
-                    child: Center(child: Text('No upcoming payments',
-                        style: TextStyle(color: Colors.grey[600]))),
-                  ))
-                else
-                  ...upcoming.take(5).map((p) => Card(
-                    margin: const EdgeInsets.only(bottom: 8),
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: p.isPaid ? Colors.green : Colors.orange,
-                        child: Icon(p.isPaid ? Icons.check : Icons.pending,
-                            color: Colors.white),
-                      ),
-                      title: Text('\$${p.amount.toStringAsFixed(2)}',
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18)),
-                      subtitle: Text(
-                          'Due: ${DateFormat('MMM dd, yyyy').format(p.dueDate)}'),
-                      trailing: p.isPaid
-                          ? const Icon(Icons.check_circle, color: Colors.green)
-                          : null,
-                    ),
-                  )),
-              ],
-            ),
+              );
+            },
           );
         },
       ),
-    );
-  }
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// _BridgeSection — profile card → floating avatar → calendar card
-//
-// Layout trick (no measuring required):
-//   ① Profile card has extra bottom padding (= avatarOverlapUp = 44px)
-//      so there's a clean "seat" zone at the bottom of the card for the avatar.
-//   ② A Stack(clipBehavior: Clip.none) wraps ONLY the profile card.
-//      The avatar is Positioned(bottom: -avatarBelowCard) — it extends below
-//      the Stack boundary with clipBehavior: Clip.none.
-//   ③ A SizedBox(height: avatarBelowCard + gap) reserves vertical layout space
-//      for the part of the avatar that hangs below the profile card.
-//   ④ Calendar card follows immediately — zero extra top padding.
-//   Z-order: avatar is the last child in the Stack → painted over profile card ✓
-//            calendar is a later Column sibling → painted over the SizedBox gap ✓
-//            avatar bottom < calendar card top (by `gap` px) → no visual clip ✓
-// ─────────────────────────────────────────────────────────────────────────────
-class _BridgeSection extends StatelessWidget {
-  final int avatarId;
-  final String displayName;
-  final ValueChanged<int> onAvatarSelected;
-  final ValueChanged<DateTime> onDateTap;
-
-  static const double _avatarSize      = 100.0;
-  static const double _overlapUp       = 44.0;  // avatar overlaps into profile card
-  static const double _belowCard       = 56.0;  // avatar below profile card bottom
-  static const double _gap             = 8.0;   // gap between avatar feet and calendar
-
-  const _BridgeSection({
-    required this.avatarId,
-    required this.displayName,
-    required this.onAvatarSelected,
-    required this.onDateTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // ── Profile card with avatar "seat" at bottom ──────────────────
-        Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Card(
-              margin: EdgeInsets.zero,
-              child: Padding(
-                // Extra bottom = _overlapUp so avatar sits in the card's bottom zone
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 16 + _overlapUp),
-                child: AvatarSelectorWidget(
-                  userName: displayName,
-                  onAvatarSelected: onAvatarSelected,
-                ),
-              ),
-            ),
-            // Avatar centered, extending _belowCard px below the card
-            Positioned(
-              bottom: -_belowCard,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: FloatingAvatarWidget(
-                  // ValueKey forces rebuild + fresh entry animation on avatar change
-                  key: ValueKey(avatarId),
-                  character: kAvatarCharacters[avatarId],
-                  size: _avatarSize,
-                ),
-              ),
-            ),
-          ],
-        ),
-
-        // ── Gap: reserves layout space for avatar below profile card ────
-        const SizedBox(height: _belowCard + _gap),
-
-        // ── Calendar card — clean, no extra top padding ─────────────────
-        Card(
-          margin: EdgeInsets.zero,
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: MonthCalendarWidget(onDateTap: onDateTap),
-          ),
-        ),
-      ],
-    );
   }
 }
 
