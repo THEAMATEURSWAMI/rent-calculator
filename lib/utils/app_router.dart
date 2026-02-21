@@ -98,7 +98,7 @@ class _NoTransitionPage extends CustomTransitionPage {
           transitionDuration: Duration.zero,
         );
 
-  static Widget _noTransition(context, animation, secondaryAnimation, child) => child;
+  static Widget _noTransition(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) => child;
 }
 
 class _FadeTransitionPage extends CustomTransitionPage {
@@ -108,7 +108,7 @@ class _FadeTransitionPage extends CustomTransitionPage {
           transitionDuration: const Duration(milliseconds: 300),
         );
 
-  static Widget _fadeTransition(context, animation, secondaryAnimation, child) {
+  static Widget _fadeTransition(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
     return FadeTransition(opacity: animation, child: child);
   }
 }
@@ -120,7 +120,7 @@ class _SlideTransitionPage extends CustomTransitionPage {
           transitionDuration: const Duration(milliseconds: 400),
         );
 
-  static Widget _slideTransition(context, animation, secondaryAnimation, child) {
+  static Widget _slideTransition(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
     return SlideTransition(
       position: animation.drive(
         Tween(begin: const Offset(0, 1), end: Offset.zero).chain(

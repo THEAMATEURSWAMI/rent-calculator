@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../services/firebase_service.dart';
-import '../../services/remember_me_service.dart';
 import '../../models/rent_payment.dart';
 import '../../services/rent_calculator_service.dart';
 import '../../widgets/month_calendar_widget.dart';
@@ -21,16 +20,13 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  int _avatarId = 0;
-
   @override
   void initState() {
     super.initState();
     // Load saved avatar once we have the email
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final email = context.read<FirebaseService>().currentUser?.email ?? '';
-      final id = await AvatarSelectorWidget.getSavedAvatarId(_nameFrom(email));
-      if (mounted) setState(() => _avatarId = id);
+      await AvatarSelectorWidget.getSavedAvatarId(_nameFrom(email));
     });
   }
 
@@ -57,8 +53,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                AppTheme.primaryBlue.withOpacity(0.8),
-                AppTheme.primaryTeal.withOpacity(0.8),
+                AppTheme.primaryBlue.withValues(alpha: 0.8),
+                AppTheme.primaryTeal.withValues(alpha: 0.8),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -324,12 +320,12 @@ class _SummaryCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
         ],
-        border: Border.all(color: color.withOpacity(0.1)),
+        border: Border.all(color: color.withValues(alpha: 0.1)),
       ),
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -343,7 +339,7 @@ class _SummaryCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.1),
+                    color: color.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: const Icon(Icons.trending_up, size: 12, color: Colors.white24),
@@ -360,7 +356,7 @@ class _SummaryCard extends StatelessWidget {
             const SizedBox(height: 4),
             Text(title,
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.5),
+                  color: Colors.white.withValues(alpha: 0.5),
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
                 )),
@@ -398,9 +394,9 @@ class _ActionButton extends StatelessWidget {
           width: 100,
           padding: const EdgeInsets.symmetric(vertical: 16),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.08),
+            color: color.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: color.withOpacity(0.2)),
+            border: Border.all(color: color.withValues(alpha: 0.2)),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,

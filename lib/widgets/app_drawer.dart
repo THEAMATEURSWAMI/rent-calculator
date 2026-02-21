@@ -20,7 +20,6 @@ class AppDrawer extends StatelessWidget {
     final firebaseService = context.watch<FirebaseService>();
     final email = firebaseService.currentUser?.email ?? '';
     final displayName = _nameFrom(email);
-    final theme = Theme.of(context);
 
     return Drawer(
       backgroundColor: AppTheme.darkBackground,
@@ -55,7 +54,7 @@ class AppDrawer extends StatelessWidget {
                   email,
                   style: TextStyle(
                     fontSize: 12,
-                    color: Colors.white.withOpacity(0.7),
+                    color: Colors.white.withValues(alpha: 0.7),
                   ),
                 ),
               ],
