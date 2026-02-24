@@ -45,6 +45,18 @@ app.*.map.json
 /android/app/release
 /android/build/
 
+# Firebase / Secrets
+google-services.json
+GoogleService-Info.plist
+*.jks
+*.keystore
+*.p12
+*.pem
+.env*
+.env
+secret.json
+firebase_service_account.json
+
 # Windows
 /windows/
 
