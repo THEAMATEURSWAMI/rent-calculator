@@ -2,7 +2,7 @@ name: rent_calculator
 description: "A Flutter web app for tracking rent dues, calculating rent, and budgeting with Plaid integration."
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: '>=3.10.7 <4.0.0'
