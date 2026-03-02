@@ -26,6 +26,7 @@ Color _colorFor(String name) =>
     _userColors[name] ?? const Color(0xFF888888);
 
 class UtilitySplitScreen extends StatefulWidget {
+  const UtilitySplitScreen({super.key});
 
   @override
   State<UtilitySplitScreen> createState() => _UtilitySplitScreenState();

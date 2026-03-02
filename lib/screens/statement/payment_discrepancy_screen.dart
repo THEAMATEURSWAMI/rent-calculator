@@ -214,17 +214,17 @@ class _ComparisonCard extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
-                _Row('App Calculated (Owed)', fmt.format(jacobOwed), bold: true),
+                _auditRow('App Calculated (Owed)', fmt.format(jacobOwed), bold: true),
                 const Divider(height: 24),
-                _Row('Actual Paid (Zelle)', fmt.format(jacobPaid), color: Colors.green),
+                _auditRow('Actual Paid (Zelle)', fmt.format(jacobPaid), color: Colors.green),
                 const SizedBox(height: 12),
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: isUnderpaid ? Colors.orange.withAlpha(30) : Colors.green.withAlpha(30),
+                    color: isUnderpaid ? Colors.orange.withValues(alpha: 0.1) : Colors.green.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: _Row(
+                  child: _auditRow(
                     isUnderpaid ? 'Still Owed' : 'Credit Balance',
                     fmt.format(diff.abs()),
                     color: isUnderpaid ? Colors.orange : Colors.green,
@@ -246,7 +246,7 @@ class _ComparisonCard extends StatelessWidget {
     );
   }
 
-  Widget _Row(String label, String value, {bool bold = false, Color? color}) {
+  Widget _auditRow(String label, String value, {bool bold = false, Color? color}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

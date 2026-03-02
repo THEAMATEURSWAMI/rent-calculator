@@ -139,13 +139,13 @@ class UtilityBill {
   /// Simple total-based distribution (fallback/legacy).
   static List<UtilitySplit> calcAmounts(List<UtilitySplit> base, double total) {
     if (base.isEmpty) return base;
-    final totalWeight = base.fold<double>(0, (sum, s) => sum + s.weight);
+    final totalWeight = base.fold<double>(0, (acc, s) => acc + s.weight);
     if (totalWeight == 0) return base;
 
     return base.map((s) => s.copyWith(amount: (s.weight / totalWeight) * total)).toList();
   }
 
-  double get paidAmount => splits.where((s) => s.isPaid).fold<double>(0, (a, b) => a + b.amount);
+  double get paidAmount => splits.where((s) => s.isPaid).fold<double>(0, (acc, s) => acc + s.amount);
   double get remainingAmount => totalAmount - paidAmount;
   bool   get isFullyPaid => remainingAmount <= 0.01;
 
