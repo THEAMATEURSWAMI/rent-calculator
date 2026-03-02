@@ -96,10 +96,10 @@ class _InfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 0,
-      color: Colors.white.withAlpha(10),
+      color: Colors.white.withValues(alpha: 0.04),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: Colors.white.withAlpha(20)),
+        side: BorderSide(color: Colors.white.withValues(alpha: 0.08)),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -140,15 +140,15 @@ class _ZelleTransactionCard extends StatelessWidget {
     final isIncome = type == 'They paid';
     return Card(
       elevation: 0,
-      color: Colors.white.withAlpha(5),
+      color: Colors.white.withValues(alpha: 0.02),
       margin: const EdgeInsets.only(bottom: 8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Colors.white.withAlpha(10)),
+        side: BorderSide(color: Colors.white.withValues(alpha: 0.04)),
       ),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: isIncome ? Colors.green.withAlpha(40) : Colors.blue.withAlpha(40),
+          backgroundColor: isIncome ? Colors.green.withValues(alpha: 0.15) : Colors.blue.withValues(alpha: 0.15),
           child: Icon(
             isIncome ? Icons.arrow_downward : Icons.arrow_upward,
             color: isIncome ? Colors.green : Colors.blue,

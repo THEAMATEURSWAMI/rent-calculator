@@ -115,8 +115,8 @@ class _HeaderCard extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Theme.of(context).colorScheme.primary.withAlpha(200),
-            Theme.of(context).colorScheme.secondary.withAlpha(180),
+            Theme.of(context).colorScheme.primary.withValues(alpha: 0.8),
+            Theme.of(context).colorScheme.secondary.withValues(alpha: 0.7),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -140,7 +140,7 @@ class _HeaderCard extends StatelessWidget {
                           fontWeight: FontWeight.bold)),
                   Text('Statement period: Jan 9 – Feb 28, 2026',
                       style: TextStyle(
-                          color: Colors.white.withAlpha(200), fontSize: 12)),
+                          color: Colors.white.withValues(alpha: 0.8), fontSize: 12)),
                 ],
               ),
             ],
@@ -358,7 +358,7 @@ class _PersonRow extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 12,
-                  backgroundColor: color.withAlpha(50),
+                  backgroundColor: color.withValues(alpha: 0.2),
                   child: Text(name[0],
                       style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 11)),
                 ),
@@ -394,7 +394,7 @@ class _PersonRow extends StatelessWidget {
               decoration: BoxDecoration(
                 color: noData || paid == 0
                     ? Colors.transparent
-                    : balanceColor.withAlpha(30),
+                    : balanceColor.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Text(
@@ -469,7 +469,7 @@ class _SectionCard extends StatelessWidget {
       color: Theme.of(context).colorScheme.surface,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
-          side: BorderSide(color: Colors.grey.withAlpha(40))),
+          side: BorderSide(color: Colors.grey.withValues(alpha: 0.15))),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -528,7 +528,7 @@ class _RunningBalanceSummary extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 16,
-                    backgroundColor: color.withAlpha(50),
+                  backgroundColor: color.withValues(alpha: 0.2),
                     child: Text(u.name[0],
                         style: TextStyle(color: color, fontWeight: FontWeight.bold)),
                   ),
@@ -550,9 +550,9 @@ class _RunningBalanceSummary extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: pos  ? Colors.green.withAlpha(30)
-                           : neg  ? Colors.red.withAlpha(30)
-                           : Colors.grey.withAlpha(20),
+                      color: pos  ? Colors.green.withValues(alpha: 0.12)
+                           : neg  ? Colors.red.withValues(alpha: 0.12)
+                           : Colors.grey.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(

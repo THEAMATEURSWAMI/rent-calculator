@@ -766,7 +766,7 @@ class _CostBreakdownChart extends StatelessWidget {
 
     return Card(
       elevation: 0,
-      color: Colors.white.withOpacity(0.05),
+      color: Colors.white.withValues(alpha: 0.05),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -849,7 +849,7 @@ class _ReconciliationCard extends StatelessWidget {
 
         return Card(
           elevation: 0,
-          color: Colors.white.withOpacity(0.05),
+          color: Colors.white.withValues(alpha: 0.05),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -886,7 +886,7 @@ class _ReconciliationCard extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 14,
-                          backgroundColor: color.withOpacity(0.2),
+                          backgroundColor: color.withValues(alpha: 0.2),
                           child: Text(u.name[0],
                               style: TextStyle(
                                   color: color, fontWeight: FontWeight.bold, fontSize: 12)),
@@ -916,10 +916,10 @@ class _ReconciliationCard extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
                               color: credit > 0
-                                  ? Colors.green.withOpacity(0.15)
+                                  ? Colors.green.withValues(alpha: 0.15)
                                   : credit < 0
-                                      ? Colors.red.withOpacity(0.15)
-                                      : Colors.grey.withOpacity(0.1),
+                                      ? Colors.red.withValues(alpha: 0.15)
+                                      : Colors.grey.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(

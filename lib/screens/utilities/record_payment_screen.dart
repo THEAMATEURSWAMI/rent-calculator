@@ -107,7 +107,7 @@ class _RecordPaymentScreenState extends State<RecordPaymentScreen> {
               children: [
                 Expanded(
                   child: DropdownButtonFormField<int>(
-                    value: _month,
+                    initialValue: _month,
                     decoration: const InputDecoration(labelText: 'Month'),
                     items: months.map((m) => DropdownMenuItem(
                         value: m,
@@ -118,7 +118,7 @@ class _RecordPaymentScreenState extends State<RecordPaymentScreen> {
                 const SizedBox(width: 16),
                 Expanded(
                   child: DropdownButtonFormField<int>(
-                    value: _year,
+                    initialValue: _year,
                     decoration: const InputDecoration(labelText: 'Year'),
                     items: [2026, 2027].map((y) =>
                         DropdownMenuItem(value: y, child: Text('$y'))).toList(),
@@ -167,10 +167,10 @@ class _RecordPaymentScreenState extends State<RecordPaymentScreen> {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: creditPos
-                      ? Colors.green.withOpacity(0.12)
+                      ? Colors.green.withValues(alpha: 0.12)
                       : creditNeg
-                          ? Colors.red.withOpacity(0.12)
-                          : Colors.grey.withOpacity(0.08),
+                          ? Colors.red.withValues(alpha: 0.12)
+                          : Colors.grey.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
