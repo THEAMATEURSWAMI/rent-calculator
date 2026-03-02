@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../services/firebase_service.dart';
 import '../../models/utility_bill.dart';
-import '../../models/payment_record.dart';
 import '../../widgets/app_drawer.dart';
 
 class PaymentDiscrepancyScreen extends StatelessWidget {
@@ -49,38 +48,43 @@ class PaymentDiscrepancyScreen extends StatelessWidget {
             ],
             stops: const [0.0, 0.4],
           ),
+        ),
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(16, 120, 16, 16),
           child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _InfoCard(),
-            const SizedBox(height: 24),
-            
-            Text(
-              'Actual Zelle Activity (Feb Period)',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 12),
-            ...febPeriodPayments.map((p) => _ZelleTransactionCard(
-              date: p['date'] as DateTime,
-              amount: p['amount'] as double,
-              note: p['note'] as String,
-              type: p['type'] as String,
-              fmt: fmt,
-            )),
-            
-            const SizedBox(height: 32),
-            Text(
-              'Comparison (Jacob)',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 12),
-            _ComparisonCard(fb: fb, fmt: fmt, actualPayments: febPeriodPayments),
-            
-            const SizedBox(height: 40),
-            _AutomatedVerificationSection(),
-          ],
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _InfoCard(),
+              const SizedBox(height: 24),
+              Text(
+                'Actual Zelle Activity (Feb Period)',
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium
+                    ?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 12),
+              ...febPeriodPayments.map((p) => _ZelleTransactionCard(
+                    date: p['date'] as DateTime,
+                    amount: p['amount'] as double,
+                    note: p['note'] as String,
+                    type: p['type'] as String,
+                    fmt: fmt,
+                  )),
+              const SizedBox(height: 32),
+              Text(
+                'Comparison (Jacob)',
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium
+                    ?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 12),
+              _ComparisonCard(fb: fb, fmt: fmt, actualPayments: febPeriodPayments),
+              const SizedBox(height: 40),
+              _AutomatedVerificationSection(),
+            ],
+          ),
         ),
       ),
     );
