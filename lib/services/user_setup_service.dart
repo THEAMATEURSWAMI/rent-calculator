@@ -6,7 +6,7 @@ import '../utils/default_users.dart';
 class UserSetupService {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  /// Creates the 3 default user accounts (Jacob, Nico, Eddy) in Firebase
+  /// Creates the 3 default user accounts in Firebase
   /// if they don't already exist. Safe to call multiple times.
   static Future<void> createDefaultUsersIfNeeded() async {
     for (final user in DefaultUsers.users) {
@@ -45,12 +45,12 @@ class UserSetupService {
         {'description': 'Smart Home', 'amount': 40.0, 'isWeighted': false},
         {'description': 'CAM Fee', 'amount': 12.0, 'isWeighted': false},
         {'description': 'Trash Admin', 'amount': 3.0, 'isWeighted': false},
-        {'description': 'Jacob Credit Builder', 'amount': 5.99, 'isWeighted': true},
+        {'description': 'Credit Builder', 'amount': 5.99, 'isWeighted': true},
       ],
       'splits': [
-        {'userName': 'Jacob', 'weight': 0.25, 'amount': 512.24, 'isPaid': false},
-        {'userName': 'Eddy', 'weight': 0.25, 'amount': 506.25, 'isPaid': false},
-        {'userName': 'Nico', 'weight': 0.50, 'amount': 1012.50, 'isPaid': false},
+        {'userName': 'Roommate A', 'weight': 0.25, 'amount': 512.24, 'isPaid': false},
+        {'userName': 'Roommate B', 'weight': 0.25, 'amount': 506.25, 'isPaid': false},
+        {'userName': 'Roommate C', 'weight': 0.50, 'amount': 1012.50, 'isPaid': false},
       ],
       'createdAt': FieldValue.serverTimestamp(),
     });
@@ -71,9 +71,9 @@ class UserSetupService {
         {'description': 'Other (Deposit)', 'amount': 200.0, 'isWeighted': false},
       ],
       'splits': [
-        {'userName': 'Jacob', 'weight': 1.0, 'amount': 113.82, 'isPaid': false},
-        {'userName': 'Eddy', 'weight': 0.5, 'amount': 94.71, 'isPaid': false},
-        {'userName': 'Nico', 'weight': 0.5, 'amount': 94.71, 'isPaid': false},
+        {'userName': 'Roommate A', 'weight': 1.0, 'amount': 113.82, 'isPaid': false},
+        {'userName': 'Roommate B', 'weight': 0.5, 'amount': 94.71, 'isPaid': false},
+        {'userName': 'Roommate C', 'weight': 0.5, 'amount': 94.71, 'isPaid': false},
       ],
       'createdAt': FieldValue.serverTimestamp(),
     });

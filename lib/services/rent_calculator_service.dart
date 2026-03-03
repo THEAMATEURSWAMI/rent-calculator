@@ -32,12 +32,12 @@ class RentCalculatorService {
     // Jacob & Eddy pay 1/4th (25%) each.
     // Nico pays 1/2 (50%).
     final names = roommateIds.map((id) => id.split('@').first.toLowerCase()).toList();
-    if (names.contains('jacob') && names.contains('eddy') && names.contains('nico')) {
+    if (names.contains('Roommate A') && names.contains('Roommate C') && names.contains('Roommate B')) {
       for (final id in roommateIds) {
         final name = id.split('@').first.toLowerCase();
-        if (name == 'jacob' || name == 'eddy') {
+        if (name == 'Roommate A' || name == 'Roommate C') {
           totals[id] = totalRent * 0.25;
-        } else if (name == 'nico') {
+        } else if (name == 'Roommate B') {
           totals[id] = totalRent * 0.50;
         } else {
           totals[id] = totalRent / roommateIds.length;

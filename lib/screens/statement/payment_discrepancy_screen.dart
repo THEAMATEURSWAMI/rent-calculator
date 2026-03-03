@@ -15,10 +15,10 @@ class PaymentDiscrepancyScreen extends StatelessWidget {
 
     // Data from the user's Zelle screenshot
     final actualPayments = [
-      {'date': DateTime(2026, 1, 29), 'amount': 544.47, 'note': 'February Rent', 'type': 'You paid'},
-      {'date': DateTime(2026, 1, 24), 'amount': 39.00, 'note': 'Grocery', 'type': 'They paid'},
-      {'date': DateTime(2026, 1, 22), 'amount': 6.70, 'note': 'Utility', 'type': 'You paid'},
-      {'date': DateTime(2026, 1, 5), 'amount': 375.60, 'note': '', 'type': 'You paid'},
+      {'date': DateTime(2026, 1, 29), 'amount': 450.00, 'note': 'Current Rent', 'type': 'You paid'},
+      {'date': DateTime(2026, 1, 24), 'amount': 45.50, 'note': 'Grocery Split', 'type': 'They paid'},
+      {'date': DateTime(2026, 1, 22), 'amount': 12.30, 'note': 'Utility Split', 'type': 'You paid'},
+      {'date': DateTime(2026, 1, 5), 'amount': 300.20, 'note': 'Standard Payment', 'type': 'You paid'},
     ];
 
     // Filter payments for February period (mostly Jan late payments)
@@ -73,7 +73,7 @@ class PaymentDiscrepancyScreen extends StatelessWidget {
                   )),
               const SizedBox(height: 32),
               Text(
-                'Comparison (Jacob)',
+                'Comparison (Roommate A)',
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium
@@ -184,27 +184,27 @@ class _ComparisonCard extends StatelessWidget {
         if (!snap.hasData) return const Center(child: CircularProgressIndicator());
         
         final bills = snap.data!;
-        double jacobOwed = 0;
+        double roommateAOwed = 0;
         for (final bill in bills) {
           final jacobSplit = bill.splits.firstWhere(
-            (s) => s.userName == 'Jacob',
-            orElse: () => UtilitySplit(userName: 'Jacob', weight: 0, amount: 0, isPaid: false),
+            (s) => s.userName == 'Roommate A',
+            orElse: () => UtilitySplit(userName: 'Roommate A', weight: 0, amount: 0, isPaid: false),
           );
-          jacobOwed += jacobSplit.amount;
+          roommateAOwed += jacobSplit.amount;
         }
 
-        double jacobPaid = 0;
+        double roommateAPaid = 0;
         for (final p in actualPayments) {
           if (p['type'] == 'You paid') {
-            jacobPaid += p['amount'] as double;
+            roommateAPaid += p['amount'] as double;
           } else {
             // Nico paid Jacob (e.g. for groceries), so this reduces what Jacob "effectively" paid
             // Or rather, it's a separate credit. Let's keep it simple:
-            // jacobPaid -= p['amount'] as double; 
+            // roommateAPaid -= p['amount'] as double; 
           }
         }
 
-        final diff = jacobPaid - jacobOwed;
+        final diff = roommateAPaid - roommateAOwed;
         final isUnderpaid = diff < -0.01;
 
         return Card(
@@ -214,9 +214,9 @@ class _ComparisonCard extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
-                _auditRow('App Calculated (Owed)', fmt.format(jacobOwed), bold: true),
+                _auditRow('App Calculated (Owed)', fmt.format(roommateAOwed), bold: true),
                 const Divider(height: 24),
-                _auditRow('Actual Paid (Zelle)', fmt.format(jacobPaid), color: Colors.green),
+                _auditRow('Actual Paid (Zelle)', fmt.format(roommateAPaid), color: Colors.green),
                 const SizedBox(height: 12),
                 Container(
                   padding: const EdgeInsets.all(12),

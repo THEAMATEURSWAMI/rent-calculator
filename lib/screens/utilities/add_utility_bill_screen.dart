@@ -7,9 +7,9 @@ import '../../utils/default_users.dart';
 
 // ─── User colours ─────────────────────────────────────────────────────────────
 const _userColors = {
-  'Jacob': Color(0xFF4A90D9),
-  'Nico':  Color(0xFF27AE60),
-  'Eddy':  Color(0xFFE67E22),
+  'Roommate A': Color(0xFF4A90D9),
+  'Roommate B':  Color(0xFF27AE60),
+  'Roommate C':  Color(0xFFE67E22),
 };
 Color _colorFor(String n) => _userColors[n] ?? const Color(0xFF888888);
 

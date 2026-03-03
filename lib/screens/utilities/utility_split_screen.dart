@@ -17,9 +17,9 @@ import '../../widgets/avatar_selector_widget.dart';
 
 // Per-user accent colours (match DefaultUsers)
 const _userColors = {
-  'Jacob': Color(0xFF4A90D9),
-  'Nico':  Color(0xFF27AE60),
-  'Eddy':  Color(0xFFE67E22),
+  'Roommate A': Color(0xFF4A90D9),
+  'Roommate B':  Color(0xFF27AE60),
+  'Roommate C':  Color(0xFFE67E22),
 };
 
 Color _colorFor(String name) =>

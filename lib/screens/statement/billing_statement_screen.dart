@@ -9,16 +9,15 @@ import '../../utils/default_users.dart';
 import '../../widgets/app_drawer.dart';
 
 const _userColors = {
-  'Jacob': Color(0xFF4A90D9),
-  'Nico':  Color(0xFF27AE60),
-  'Eddy':  Color(0xFFE67E22),
+  'Roommate A': Color(0xFF4A90D9),
+  'Roommate B':  Color(0xFF27AE60),
+  'Roommate C':  Color(0xFFE67E22),
 };
 
 String _displayName(String name) {
-  if (!DefaultUsers.isPortfolioMode) return name;
-  if (name == 'Jacob') return 'Roommate A';
-  if (name == 'Nico')  return 'Roommate B';
-  if (name == 'Eddy')  return 'Roommate C';
+  if (name == 'Roommate A') return 'Roommate A';
+  if (name == 'Roommate B')  return 'Roommate B';
+  if (name == 'Roommate C')  return 'Roommate C';
   return name;
 }
 
@@ -155,9 +154,9 @@ class _HeaderCard extends StatelessWidget {
                   fontSize: 10,
                   letterSpacing: 1.5)),
           const SizedBox(height: 8),
-          _RulePill(icon: Icons.home, label: 'Rent & Fees → Jacob 25% · Eddy 25% · Nico 50%'),
+          _RulePill(icon: Icons.home, label: 'Rent & Fees → A 25% · C 25% · B 50%'),
           const SizedBox(height: 6),
-          _RulePill(icon: Icons.bolt, label: 'Electricity Usage → Jacob 50% · Eddy 25% · Nico 25%'),
+          _RulePill(icon: Icons.bolt, label: 'Electricity Usage → A 50% · C 25% · B 25%'),
           const SizedBox(height: 6),
           _RulePill(icon: Icons.water_drop, label: 'Other Utility Fees → Even split (33.3% each)'),
         ],

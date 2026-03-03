@@ -18,24 +18,24 @@ class DefaultUsers {
 
   static const List<DefaultUser> users = [
     DefaultUser(
-      name: 'Jacob',
-      email: 'jacob@rentcalc.app',
-      password: '46464061',
-      initials: 'JA',
+      name: 'Roommate A',
+      email: 'a@rentcalc.app',
+      password: 'password123',
+      initials: 'RA',
       colorValue: 0xFF4A90D9, // Blue
     ),
     DefaultUser(
-      name: 'Nico',
-      email: 'nico@rentcalc.app',
-      password: '46464061',
-      initials: 'NI',
+      name: 'Roommate B',
+      email: 'b@rentcalc.app',
+      password: 'password123',
+      initials: 'RB',
       colorValue: 0xFF27AE60, // Green
     ),
     DefaultUser(
-      name: 'Eddy',
-      email: 'eddy@rentcalc.app',
-      password: '46464061',
-      initials: 'ED',
+      name: 'Roommate C',
+      email: 'c@rentcalc.app',
+      password: 'password123',
+      initials: 'RC',
       colorValue: 0xFFE67E22, // Orange
     ),
   ];
