@@ -37,6 +37,17 @@ jobs:
           cache: true
       - name: Build Web
         run: flutter build web --release
+      - name: Verify Secrets
+        run: |
+          if [ -z "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" ]; then
+            echo "ERROR: FIREBASE_SERVICE_ACCOUNT secret is missing or empty!"
+            exit 1
+          fi
+          if [[ "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" != *"client_email"* ]]; then
+            echo "ERROR: FIREBASE_SERVICE_ACCOUNT does not contain 'client_email'. It might be corrupt or incomplete."
+            exit 1
+          fi
+          echo "Secrets verified successfully."
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
